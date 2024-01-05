@@ -1,0 +1,54 @@
+﻿@model ArtistPortfolio.Models.Models.Image
+@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = @Localizer["Детали"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section my-5 px-2">
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="my-3 text-center border border-0">
+                <div class="">
+                    <img src="~/images/@Model.ImageUrl" class="img-fluid w-75 img-box-shadow">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+            <div class="my-3 border border-0">
+                @if (CultureInfo.CurrentCulture.Name == "en-US")
+                {
+                    <h5 class="text-start">@Model.TitleEN <small>(@(Model.IsForSale ? "For sale" : "Not for sale"))</small></h5>
+                    <hr />
+                    <div class="detail-body">
+                        <div class="d-flex flex-column">
+                            <span><strong>Format:</strong> @Model.Format cm</span>
+                            <span><strong>Technique:</strong> @Model.TechniqueEN</span>
+                        </div>
+                        <p class="my-4">
+                            @Model.DescEN
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <h5 class="text-start">@Model.TitleMK <small>(@(Model.IsForSale ? "Се продава" : "Не се продава"))</small></h5>
+                    <hr />
+                    <div class="detail-body">
+                        <div class="d-flex flex-column">
+                            <span><strong>Формат:</strong> @Model.Format цм</span>
+                            <span><strong>Техника:</strong> @Model.TechniqueMK</span>
+                        </div>
+                        <p class="my-4">
+                            @Model.DescMK
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
