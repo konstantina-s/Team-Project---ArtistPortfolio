@@ -1,0 +1,14 @@
+﻿msgid "Галерија"
+msgstr "Gallery"
+
+msgid "Експонати"
+msgstr "Exhibits"
+
+msgid "Контакт"
+msgstr "Contact"
+
+msgid "Биографија"
+msgstr "Biography"
+
+msgid "буровскиАрт"
+msgstr "burovskiArt"
