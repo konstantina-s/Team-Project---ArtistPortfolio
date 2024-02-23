@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArtistPortfolio.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ImageDashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -97,7 +97,7 @@ namespace ArtistPortfolio.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateImage(long? id, [Bind("Id,TitleMK,TitleEN,DescMK,DescEN,TechniqueMK,TechniqueEN,Format,ImageFile,IsForSale")] Image image)
         {
             if (id != image.Id)
