@@ -3,17 +3,20 @@
 
 html,
 body {
+    background-color: #F0F0F0;
     color: #333;
     font-family: 'Open Sans', sans-serif;
+    background-color: lightgray;
 }
 
 a {
+    background-color: #F0F0F0;
     text-decoration: none;
     color: #333;
 }
 
 .top-header {
-    background-color: #fff;
+    background-color: #F0F0F0;
 }
 
 .header-title {
@@ -22,17 +25,22 @@ a {
 }
 
 .navbar .navbar-nav .nav-link {
+    background-color: #F0F0F0;
     font-size: 18px;
     font-family: 'Open Sans', sans-serif;
+    background-color: lightgray;
 }
 
 .navbar-nav .nav-link:hover {
+    background-color: #F0F0F0;
     cursor: pointer;
 }
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
+    background-color: #F0F0F0;
     color: #0d6efd !important;
+    background-color: lightgray;
 }
 
 .row > div {
