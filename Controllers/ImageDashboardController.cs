@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArtistPortfolio.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ImageDashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -66,15 +66,26 @@ namespace ArtistPortfolio.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = UploadedFile(image);
-                image.ImageUrl = uniqueFileName;
-                _context.Attach(image);
-                _context.Entry(image).State = EntityState.Added;
-                await _context.SaveChangesAsync();
+                var imageFile = Request.Form.Files["imageFile"];
+                var base64String = Convert.ToBase64String(ReadFully(imageFile.OpenReadStream()));
+
+                image.Data = base64String;                   
+                _context.Images.Add(image);
+                _context.SaveChanges();             
+
                 return RedirectToAction(nameof(Index));
             }
 
             return View(image);
+        }
+
+        private byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
 
         // GET: /ImageDashboard/UpdateImage/{id}
@@ -97,7 +108,7 @@ namespace ArtistPortfolio.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateImage(long? id, [Bind("Id,TitleMK,TitleEN,DescMK,DescEN,TechniqueMK,TechniqueEN,Format,ImageFile,IsForSale")] Image image)
         {
             if (id != image.Id)
@@ -109,11 +120,12 @@ namespace ArtistPortfolio.Controllers
             {
                 try
                 {
-                    string uniqueFileName = UploadedFile(image);
-                    image.ImageUrl = uniqueFileName;
-                    _context.Attach(image);
-                    _context.Entry(image).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                    var imageFile = Request.Form.Files["imageFile"];
+                    var base64String = Convert.ToBase64String(ReadFully(imageFile.OpenReadStream()));
+
+                    image.Data = base64String;
+                    _context.Images.Add(image);
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
