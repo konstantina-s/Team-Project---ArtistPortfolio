@@ -20,6 +20,8 @@ namespace ArtistPortfolio.Models.Models
         public IFormFile? ImageFile { get; set; }
 
         public string? ImageUrl { get; set; }
+
+        public string? ImageData { get; set; }
     }
 }
 

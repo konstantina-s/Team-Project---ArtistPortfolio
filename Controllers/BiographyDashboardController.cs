@@ -90,11 +90,12 @@ namespace ArtistPortfolio.Controllers
             {
                 try
                 {
-                    string uniqueFileName = UploadedFile(biography);
-                    biography.ImageUrl = uniqueFileName;
-                    _context.Attach(biography);
-                    _context.Entry(biography).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                    var imageFile = Request.Form.Files["imageFile"];
+                    var base64String = Convert.ToBase64String(ReadFully(imageFile.OpenReadStream()));
+
+                    biography.ImageData = base64String;
+                    _context.Biography.Add(biography);
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -112,6 +113,15 @@ namespace ArtistPortfolio.Controllers
             }
             return View(biography);
         }
+        private byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
