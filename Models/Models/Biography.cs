@@ -21,6 +21,7 @@ namespace ArtistPortfolio.Models.Models
 
         public string? ImageUrl { get; set; }
 
+        [Column(TypeName = "nvarchar(max)")]
         public string? ImageData { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using ArtistPortfolio.Data;
 using ArtistPortfolio.Models.Identity;
+using ArtistPortfolio.Services.Implementations;
+using ArtistPortfolio.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -55,6 +57,8 @@ builder.Services.AddPortableObjectLocalization()
             new CookieRequestCultureProvider()
         };
     });
+
+builder.Services.AddScoped<IImageService, ImageService>();
 
 var app = builder.Build();
 
