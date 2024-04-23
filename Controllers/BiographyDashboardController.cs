@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ArtistPortfolio.Data;
 using ArtistPortfolio.Models.Models;
+using ArtistPortfolio.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +11,12 @@ namespace ArtistPortfolio.Controllers
     public class BiographyDashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IImageService _imageService;
 
-        public BiographyDashboardController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public BiographyDashboardController(ApplicationDbContext context, IImageService imageService) 
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
+            _imageService = imageService;
         }
 
         // GET: /BiographyDashboard
@@ -47,11 +44,12 @@ namespace ArtistPortfolio.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = UploadedFile(biography);
-                biography.ImageUrl = uniqueFileName;
-                _context.Attach(biography);
-                _context.Entry(biography).State = EntityState.Added;
-                await _context.SaveChangesAsync();
+                var base64String = _imageService.ConvertImageToBase64(Request.Form.Files["imageFile"]);
+
+                biography.ImageData = base64String;
+                _context.Biography.Add(biography);
+                _context.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -90,11 +88,11 @@ namespace ArtistPortfolio.Controllers
             {
                 try
                 {
-                    string uniqueFileName = UploadedFile(biography);
-                    biography.ImageUrl = uniqueFileName;
-                    _context.Attach(biography);
-                    _context.Entry(biography).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                    var base64String = _imageService.ConvertImageToBase64(Request.Form.Files["imageFile"]);
+
+                    biography.ImageData = base64String;
+                    _context.Biography.Add(biography);
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,24 +122,6 @@ namespace ArtistPortfolio.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        // Method: Upload file to DB
-        private string UploadedFile(Biography biography)
-        {
-            string uniqueFileName = null!;
-
-            if (biography.ImageFile != null)
-            {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                uniqueFileName = biography.ImageFile.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    biography.ImageFile.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
         }
     }
 }

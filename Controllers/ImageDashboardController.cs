@@ -1,25 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ArtistPortfolio.Data;
 using ArtistPortfolio.Models.Models;
+using ArtistPortfolio.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArtistPortfolio.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ImageDashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IImageService _imageService;
 
-        public ImageDashboardController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ImageDashboardController(ApplicationDbContext context, IImageService imageService)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
+            _imageService = imageService;
         }
 
         // GET: /ImageDashboard
@@ -66,26 +63,16 @@ namespace ArtistPortfolio.Controllers
         {
             if (ModelState.IsValid)
             {
-                var imageFile = Request.Form.Files["imageFile"];
-                var base64String = Convert.ToBase64String(ReadFully(imageFile.OpenReadStream()));
+                var base64String = _imageService.ConvertImageToBase64(Request.Form.Files["imageFile"]);
 
-                image.Data = base64String;                   
+                image.Data = base64String;
                 _context.Images.Add(image);
-                _context.SaveChanges();             
+                _context.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }
 
             return View(image);
-        }
-
-        private byte[] ReadFully(Stream input)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                input.CopyTo(ms);
-                return ms.ToArray();
-            }
         }
 
         // GET: /ImageDashboard/UpdateImage/{id}
@@ -108,7 +95,7 @@ namespace ArtistPortfolio.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateImage(long? id, [Bind("Id,TitleMK,TitleEN,DescMK,DescEN,TechniqueMK,TechniqueEN,Format,ImageFile,IsForSale")] Image image)
         {
             if (id != image.Id)
@@ -120,8 +107,7 @@ namespace ArtistPortfolio.Controllers
             {
                 try
                 {
-                    var imageFile = Request.Form.Files["imageFile"];
-                    var base64String = Convert.ToBase64String(ReadFully(imageFile.OpenReadStream()));
+                    var base64String = _imageService.ConvertImageToBase64(Request.Form.Files["imageFile"]);
 
                     image.Data = base64String;
                     _context.Images.Add(image);
@@ -155,24 +141,6 @@ namespace ArtistPortfolio.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        // Method: Upload file to DB
-        private string UploadedFile(Image image)
-        {
-            string uniqueFileName = null!;
-
-            if (image.ImageFile != null)
-            {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                uniqueFileName = image.ImageFile.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    image.ImageFile.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
         }
     }
 }

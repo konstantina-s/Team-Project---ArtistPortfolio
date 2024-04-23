@@ -20,6 +20,9 @@ namespace ArtistPortfolio.Models.Models
         public IFormFile? ImageFile { get; set; }
 
         public string? ImageUrl { get; set; }
+
+        [Column(TypeName = "nvarchar(max)")]
+        public string? ImageData { get; set; }
     }
 }
 

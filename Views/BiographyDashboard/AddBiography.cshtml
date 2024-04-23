@@ -39,7 +39,10 @@
     <div class="form-group">
         <div class="d-flex justify-content-end">
             <a class="btn btn-danger me-2" asp-controller="BiographyDashboard" asp-action="Index">Назад</a>
-            <button type="submit" class="btn btn-success">Додади</button>
+            <form method="post" enctype="multipart/form-data">
+                <input type="file" name="imageFile" />
+                <button type="submit" class="btn btn-success">Додади</button>
+            </form>
         </div>
     </div>
 </form>
