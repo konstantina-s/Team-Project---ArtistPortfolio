@@ -8,7 +8,7 @@ namespace ArtistPortfolio.Models.Models
 	{
         public long Id { get; set; }
         [Required]
-        [Column(TypeName = "varchar(200)")]
+        [Column(TypeName = "nvarchar(200)")]
         public string? TitleMK { get; set; }
         [Required]
         [Column(TypeName = "varchar(200)")]
@@ -20,7 +20,7 @@ namespace ArtistPortfolio.Models.Models
         [Column(TypeName = "varchar(max)")]
         public string? DescEN { get; set; }
         [Required]
-        [Column(TypeName = "varchar(100)")]
+        [Column(TypeName = "nvarchar(100)")]
         public string? TechniqueMK { get; set; }
         [Required]
         [Column(TypeName = "varchar(100)")]
@@ -35,6 +35,7 @@ namespace ArtistPortfolio.Models.Models
         public IFormFile? ImageFile { get; set; }
 
         public string? ImageUrl { get; set; }
+        public string Data { get;  set; }
     }
 }
 

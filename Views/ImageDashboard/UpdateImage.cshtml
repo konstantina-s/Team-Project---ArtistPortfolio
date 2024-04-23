@@ -65,7 +65,10 @@
 
     <div class="form-group mb-3">
         <label asp-for="ImageFile" class="form-label">Слика:</label>
-        <input asp-for="ImageFile" class="form-control">
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="imageFile" />
+            <button type="submit" class="btn btn-success">Додади</button>
+        </form>
         <span asp-validation-for="ImageFile" class="text-danger"></span>
     </div>
 

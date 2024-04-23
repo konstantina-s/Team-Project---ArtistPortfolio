@@ -26,7 +26,7 @@
         {
             <div class="col-md-6 col-sm-6 col-xs-6 text-center">
                 <a class="image-title text-uppercase" asp-controller="Home" asp-action="Detail" asp-route-id="@image.Id">
-                    <img src="~/images/@image.ImageUrl" class="img-fluid w-50">
+                    <img src="data:image/png;base64,@image.Data" class="img-fluid w-50" style="max-height: 350px; width: auto; object-fit: cover;">
                     <div class="mb-3">
                         @if (CultureInfo.CurrentCulture.Name == "en-US")
                         {

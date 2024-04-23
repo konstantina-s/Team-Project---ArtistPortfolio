@@ -47,7 +47,7 @@ a {
     padding: 0 4px !important;
 }
 
-img {
+img { 
     margin-top: 8px;
     vertical-align: middle;
 }
@@ -61,4 +61,18 @@ img {
     box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
     -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
     -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
+}
+
+main {
+    flex: 1;
+}
+
+header {
+    background-color: grey
+}
+
+footer {
+    margin-top: auto;
+    border-top: 1px solid #ccc; 
+    padding: 10px 0; 
 }
